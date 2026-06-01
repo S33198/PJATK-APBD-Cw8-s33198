@@ -15,8 +15,10 @@ public class PatientServices : IPatientService
 
     public async Task<IEnumerable<AllPatientsDTO>> GetPatientsAsync(string? name)
     {
-        
-        var patients = await _context.Patients.Select(p => new AllPatientsDTO
+        var query = _context.Patients.AsQueryable();
+        if (!string.IsNullOrEmpty(name))
+            query = query.Where(p => p.FirstName.Contains(name) || p.LastName.Contains(name));
+        var patients = await query.Select(p => new AllPatientsDTO
         {
             Age = p.Age,
             FirstName = p.FirstName,
@@ -24,8 +26,6 @@ public class PatientServices : IPatientService
             Pesel = p.Pesel,
             Sex = p.Sex
         }).ToListAsync();
-        if(name != null)
-            patients = patients.Where(p=>p.FirstName.Contains(name) || p.LastName.Contains(name)).ToList();
         if(patients.Count == 0)
             throw new Exception("Not found");
         return patients;
