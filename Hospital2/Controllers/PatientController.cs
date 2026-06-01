@@ -18,14 +18,14 @@ public class PatientController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllPatients(string? search)
+    public async Task<IActionResult> GetAllPatients([FromQuery]string? search)
     {
         var patients = await _patientService.GetPatientsAsync(search);
         return Ok(patients);
     }
 
     [HttpPost("{id}/bedassignments")]
-    public async Task<IActionResult> AssignBed(string id, CreateBedAssigmentDTO DTO)
+    public async Task<IActionResult> AssignBed([FromRoute]string id, CreateBedAssigmentDTO DTO)
     {
         try
         {
@@ -36,8 +36,12 @@ public class PatientController : ControllerBase
         {
             if(e.Message == "No available beds")
                 return NotFound("No available beds");
+            if(e.Message == "Patient not found")
+                return NotFound("Patient not found");
+            if(e.Message == "Start date must be before end date")
+                return BadRequest("Start date must be before end date");
             Console.WriteLine(e);
-            throw;
+            return StatusCode(500, "An unexpected error occured");
         }
     }
         
