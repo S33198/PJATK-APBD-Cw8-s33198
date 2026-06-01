@@ -24,7 +24,7 @@ public class PatientServices : IPatientService
             FirstName = p.FirstName,
             LastName = p.LastName,
             Pesel = p.Pesel,
-            Sex = p.Sex
+            Sex = p.Sex,
         }).ToListAsync();
         if(patients.Count == 0)
             throw new Exception("Not found");

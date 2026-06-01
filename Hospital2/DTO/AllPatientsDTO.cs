@@ -7,4 +7,6 @@ public class AllPatientsDTO
     public string LastName { get; set; } = null!;
     public int Age { get; set; }
     public bool Sex { get; set; }
+    public List<AdmissionDTO> AdmissionDtos { get; set; }
+    public List<BedAssigmenDTO> BedAssigmenDtos { get; set; }
 }
